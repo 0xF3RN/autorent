@@ -154,3 +154,5 @@ cython_debug/
 
 # Tests for me
 /tests
+
+sql.sql
