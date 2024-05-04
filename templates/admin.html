@@ -1,0 +1,50 @@
+<!-- templates/admin.html -->
+{% extends "base.html" %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+<h2>Панель администратора</h2>
+<div class="card-container">
+    <a href="{{ url_for('admin_automobile') }}" class="card">
+        <h3>Automobile</h3>
+        <p>Table with information about automobiles.</p>
+    </a>
+    <a href="{{ url_for('admin_type_of_work') }}" class="card">
+        <h3>Type of Work</h3>
+        <p>Table with information about types of work.</p>
+    </a>
+    <a href="{{ url_for('admin_partner') }}" class="card">
+        <h3>Partner</h3>
+        <p>Table with information about partners.</p>
+    </a>
+    <a href="{{ url_for('admin_service') }}" class="card">
+        <h3>Service</h3>
+        <p>Table with information about services.</p>
+    </a>
+    <a href="{{ url_for('admin_client') }}" class="card">
+        <h3>Client</h3>
+        <p>Table with information about clients.</p>
+    </a>
+    <a href="{{ url_for('admin_employee') }}" class="card">
+        <h3>Employee</h3>
+        <p>Table with information about employees.</p>
+    </a>
+    <a href="{{ url_for('admin_invoice') }}" class="card">
+        <h3>Invoice</h3>
+        <p>Table with information about invoices.</p>
+    </a>
+    <a href="{{ url_for('admin_claim') }}" class="card">
+        <h3>Claim</h3>
+        <p>Table with information about claims.</p>
+    </a>
+    <a href="{{ url_for('admin_rent') }}" class="card">
+        <h3>Rent</h3>
+        <p>Table with information about rents.</p>
+    </a>
+    <a href="{{ url_for('admin_users') }}" class="card">
+        <h3>Users</h3>
+        <p>Table with information about website users.</p>
+    </a>
+</div>
+{% endblock %}
