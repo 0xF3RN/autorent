@@ -89,7 +89,7 @@ def admin_automobile_insert():
         conn.commit()
         conn.close()
         return redirect(url_for("admin_automobile_view"))  
-    return render_template("admin_cards/actions/insert.html")
+    return render_template("admin_cards/auto_actions/insert.html")
 
 #просмотр записей automobile
 @app.route("/admin/automobile/view")
@@ -102,7 +102,7 @@ def admin_automobile_view():
     data = cur.fetchall()
     conn.close()
     columns = [desc[0] for desc in cur.description]
-    return render_template("admin_cards/actions/view.html", data=data, columns=columns)
+    return render_template("admin_cards/auto_actions/view.html", data=data, columns=columns)
 
 
 @app.route("/admin/automobile/delete")
@@ -115,7 +115,7 @@ def admin_automobile_delete():
     data = cur.fetchall()
     conn.close()
     columns = [desc[0] for desc in cur.description]
-    return render_template("admin_cards/actions/delete.html", data=data, columns=columns)
+    return render_template("admin_cards/auto_actions/delete.html", data=data, columns=columns)
 
 @app.route("/admin/automobile/delete/<int:row_id>", methods=["DELETE"])
 def delete_row(row_id):
