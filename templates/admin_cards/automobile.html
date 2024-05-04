@@ -4,5 +4,24 @@
 {% block title %}Admin - Automobile{% endblock %}
 
 {% block content %}
-<h2>Admin - Automobile</h2>
+<h2>Панель администратора: automobile</h2>
+<div class="card-container">
+    <a href="{{ url_for('admin_automobile_insert') }}" class="card">
+        <h3>Добавить</h3>
+        <p>Добавить запись в таблцу automobile.</p>
+    </a>
+    <a href="{{ url_for('admin_automobile_update') }}" class="card">
+        <h3>Изменить</h3>
+        <p>Изменить запись в таблице automobile.</p>
+    </a>
+    <a href="{{ url_for('admin_automobile_delete') }}" class="card">
+        <h3>Удалить</h3>
+        <p>Удалить запись из таблицы automobile.</p>
+    </a>
+    <a href="{{ url_for('admin_automobile_view') }}" class="card">
+        <h3>Просмотр</h3>
+        <p>Просмотр записей в таблице automobile.</p>
+    </a>
+</div>
+    
 {% endblock %}

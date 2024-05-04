@@ -11,7 +11,7 @@
     <header>
         <nav>
             <ul>
-                <li>Аренда автомобилей</li>
+                <li><a href="{{ url_for('home') }}">Аренда автомобилей</a></li>
             </ul>
             <div class="user-menu">
                 <span class="user">{{ session.get('username', 'Login') }}</span>

@@ -24,6 +24,19 @@ def get_db_connection():
 # рут -> логин
 @app.route("/")
 def root():
+    if session.get('role') == 'admin':
+        return render_template("admin.html")
+    if session.get('role') == 'manager':
+        return render_template("manager.html")
+    return redirect(url_for("login"))
+
+# хоум, для быстрого редиректа на хоумпйдж в зависимости от роли
+@app.route("/home")
+def home():
+    if session.get('role') == 'admin':
+        return render_template("admin.html")
+    if session.get('role') == 'manager':
+        return render_template("manager.html")
     return redirect(url_for("login"))
 
 # логин
@@ -62,10 +75,54 @@ def admin():
 def admin_automobile():
     return render_template("admin_cards/automobile.html")
 
+#инсерт в таблицу automobile
+@app.route("/admin/automobile/insert", methods=["GET","POST"])
+def admin_automobile_insert():
+    if request.method == "POST":
+        id_automobile = request.form["id"]
+        manufacturer = request.form["manufacturer"]
+        registration_number = request.form["registration_number"]
+        year_of_car_manufacturer = request.form["year_of_car_manufacture"]
+        mileage = request.form["mileage"]
+        air_conditioner = request.form["air_conditioner"]
+        engine_capacity = request.form["engine_capacity"]
+        luggage_capacity = request.form["luggage_capacity"]
+        maintenance_date = request.form["maintenance_date"]
+        cost_per_day = request.form["cost_per_day"]
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO automobile (id_automobile, manufacturer, registration_number, year_of_car_manufacture, mileage, air_conditioner, engine_capacity, luggage_capacity, maintenance_date, cost_per_day) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (
+            id_automobile, manufacturer, registration_number, year_of_car_manufacturer, mileage, air_conditioner, engine_capacity, luggage_capacity, maintenance_date, cost_per_day
+        ))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_automobile_view"))  
+    return render_template("admin_cards/actions/insert.html")
+
+#просмотр записей automobile
+@app.route("/admin/automobile/view")
+def admin_automobile_view():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""SET lc_monetary TO "ru_RU.UTF-8";SELECT * FROM automobile""")
+    data = cur.fetchall()
+    conn.close()
+    columns = [desc[0] for desc in cur.description]
+    return render_template("admin_cards/actions/view.html", data=data, columns=columns)
+
+@app.route("/admin/automobile/update")
+def admin_automobile_update():
+    return render_template("admin_cards/actions/update.html")
+
+@app.route("/admin/automobile/delete")
+def admin_automobile_delete():
+    return render_template("admin_cards/actions/delete.html")
+
 @app.route("/admin/type_of_work")
 def admin_type_of_work():
     return render_template("admin_cards/type_of_work.html")
 
+#TODO partner
 @app.route("/admin/partner")
 def admin_partner():
     return render_template("admin_cards/partner.html")
