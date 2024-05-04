@@ -1,25 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, request, session
-import psycopg2
-
+from db_connection import get_db_connection
 
 app = Flask(__name__)
 app.secret_key = 'admin'
-
-# креды postgres
-DB_HOST = "localhost"
-DB_NAME = "postgres"
-DB_USER = "postgres"
-DB_PASS = "12345"
-
-# подключение к бд
-def get_db_connection():
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASS
-    )
-    return conn
 
 # рут -> логин
 @app.route("/")
@@ -62,6 +45,12 @@ def login():
             error = "Неверный логин или пароль."
             return render_template("login.html", error=error)
     return render_template("login.html")
+
+# логаут
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 
 # страница админа
 @app.route("/admin")
@@ -159,12 +148,6 @@ def admin_users():
 @app.route("/manager")
 def manager():
     return render_template("manager.html")
-
-
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect(url_for("login"))
 
 if __name__ == "__main__":
     app.run(debug=True)
