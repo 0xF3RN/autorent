@@ -17,7 +17,7 @@
                 <span class="user">{{ session.get('username', 'Login') }}</span>
                 {% if session.get('username') %}
                 <div class="user-menu-content">
-                    <a href="{{ url_for('logout') }}">Logout</a>
+                    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
                 </div>
                 {% endif %}
             </div>

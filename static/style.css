@@ -36,7 +36,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #f57c00; 
+    color: #d86d02; 
 }
 
 .user {
@@ -51,9 +51,8 @@ main {
     color: red;
 }
 
-
 .login-form {
-    max-width: 300px;
+    max-width: 500px;
     margin: 50px auto;
     padding: 20px;
     background-color: #fff;
@@ -74,27 +73,39 @@ main {
     margin-bottom: 5px;
 }
 
-.form-group input[type="text"],
-.form-group input[type="password"],
+.form-group input[type="text"]{
+    width: 96%; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.form-group input[type="password"]{
+    width: 96%; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
 .login-form button {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
 }
-
 .login-form button {
     background-color: #ff9800;
     color: white;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
 .login-form button:hover {
-    background-color: #f57c00;
+    background-color: #f57c00; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
-
 
 .tabs {
     margin-top: 20px;
@@ -138,7 +149,6 @@ main {
     margin-top: 0;
 }
 
-/* Стили для карточек */
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -154,11 +164,45 @@ main {
     border-radius: 5px;
     background-color: #f9f9f9;
     transition: all 0.3s ease;
-    text-decoration: none; /* Убрать эффект гиперссылки */
+    text-decoration: none; 
 }
 
 .card:hover {
     transform: scale(1.05);
     background: linear-gradient(45deg, #fff, #f9f9f9);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.user-menu-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1;
+}
+
+.user-menu:hover .user-menu-content {
+    display: block;
+}
+
+.logout-btn {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.logout-btn:hover {
+    background-color: #f9f9f9;
 }
