@@ -153,4 +153,6 @@ dmypy.json
 cython_debug/
 
 # Tests for me
-/tests
+tests/
+
+sql.sql
