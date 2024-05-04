@@ -281,3 +281,8 @@ tr:hover {
 .submit-button:hover {
     background-color: #3e8e41;
 }
+
+.delete-icon {
+    cursor: pointer;
+    color: red;
+}

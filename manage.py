@@ -28,7 +28,6 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        # подключение к бд
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute("SELECT * FROM users WHERE username = %s AND passwd = %s", (username, password))
@@ -62,11 +61,15 @@ def admin():
 #TODO наладить взаимодействие страниц с БД
 @app.route("/admin/automobile")
 def admin_automobile():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/automobile.html")
 
 #инсерт в таблицу automobile
 @app.route("/admin/automobile/insert", methods=["GET","POST"])
 def admin_automobile_insert():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     if request.method == "POST":
         id_automobile = request.form["id"]
         manufacturer = request.form["manufacturer"]
@@ -91,6 +94,8 @@ def admin_automobile_insert():
 #просмотр записей automobile
 @app.route("/admin/automobile/view")
 def admin_automobile_view():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""SET lc_monetary TO "ru_RU.UTF-8";SELECT * FROM automobile""")
@@ -99,49 +104,84 @@ def admin_automobile_view():
     columns = [desc[0] for desc in cur.description]
     return render_template("admin_cards/actions/view.html", data=data, columns=columns)
 
-@app.route("/admin/automobile/update")
-def admin_automobile_update():
-    return render_template("admin_cards/actions/update.html")
 
 @app.route("/admin/automobile/delete")
 def admin_automobile_delete():
-    return render_template("admin_cards/actions/delete.html")
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""SET lc_monetary TO "ru_RU.UTF-8";SELECT * FROM automobile""")
+    data = cur.fetchall()
+    conn.close()
+    columns = [desc[0] for desc in cur.description]
+    return render_template("admin_cards/actions/delete.html", data=data, columns=columns)
+
+@app.route("/admin/automobile/delete/<int:row_id>", methods=["DELETE"])
+def delete_row(row_id):
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM automobile WHERE id_automobile = %s", (row_id,))
+    conn.commit()
+    conn.close()
+    return "Успешно удалено", 200
+
 
 @app.route("/admin/type_of_work")
 def admin_type_of_work():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
 
 #TODO partner
 @app.route("/admin/partner")
 def admin_partner():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/partner.html")
 
 @app.route("/admin/service")
 def admin_service():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/service.html")
 
 @app.route("/admin/client")
 def admin_client():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/client.html")
 
 @app.route("/admin/employee")
 def admin_employee():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/employee.html")
 
 @app.route("/admin/invoice")
 def admin_invoice():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/invoice.html")
 
 @app.route("/admin/claim")
 def admin_claim():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/claim.html")
 
 @app.route("/admin/rent")
 def admin_rent():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/rent.html")
 
 @app.route("/admin/users")
 def admin_users():
+    if session.get('role') != 'admin':
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/users.html")
 
 #TODO придумать будет делать менеджер
