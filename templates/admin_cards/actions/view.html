@@ -1,0 +1,27 @@
+<!-- templates/dynamic_table.html -->
+{% extends "base.html" %}
+
+{% block title %}Просмотр{% endblock %}
+
+{% block content %}
+<h2>Просмотр таблицы</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            {% for column in columns %}
+                <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+            <tr>
+                {% for value in row %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
