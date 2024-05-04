@@ -59,7 +59,7 @@ def login():
             elif user[3] == "manager":
                 return redirect(url_for("manager"))
         else:
-            error = "Invalid username or password."
+            error = "Неверный логин или пароль."
             return render_template("login.html", error=error)
     return render_template("login.html")
 
