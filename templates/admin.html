@@ -6,45 +6,49 @@
 {% block content %}
 <h2>Панель администратора</h2>
 <div class="card-container">
+    <a href="{{ url_for('admin_sql') }}" class="card">
+        <h3>SQL query</h3>
+        <p>Выполнение sql запросов в БД с правами администратора.</p>
+    </a>
     <a href="{{ url_for('admin_automobile') }}" class="card">
-        <h3>Automobile</h3>
-        <p>Table with information about automobiles.</p>
+        <h3>Автомобили</h3>
+        <p>Доступ к таблице automobile</p>
     </a>
     <a href="{{ url_for('admin_type_of_work') }}" class="card">
-        <h3>Type of Work</h3>
-        <p>Table with information about types of work.</p>
+        <h3>Вид работ</h3>
+        <p>Доступ к таблице types_of_work.</p>
     </a>
     <a href="{{ url_for('admin_partner') }}" class="card">
-        <h3>Partner</h3>
-        <p>Table with information about partners.</p>
+        <h3>Партнер</h3>
+        <p>Доступ к таблице partner.</p>
     </a>
     <a href="{{ url_for('admin_service') }}" class="card">
-        <h3>Service</h3>
-        <p>Table with information about services.</p>
+        <h3>Сервис</h3>
+        <p>Доступ к таблице service.</p>
     </a>
     <a href="{{ url_for('admin_client') }}" class="card">
-        <h3>Client</h3>
-        <p>Table with information about clients.</p>
+        <h3>Клиенты</h3>
+        <p>Доступ к таблице client.</p>
     </a>
     <a href="{{ url_for('admin_employee') }}" class="card">
-        <h3>Employee</h3>
-        <p>Table with information about employees.</p>
+        <h3>Сотрудники</h3>
+        <p>Доступ к таблице employee.</p>
     </a>
     <a href="{{ url_for('admin_invoice') }}" class="card">
-        <h3>Invoice</h3>
-        <p>Table with information about invoices.</p>
+        <h3>Выписки</h3>
+        <p>Доступ к таблице invoice.</p>
     </a>
     <a href="{{ url_for('admin_claim') }}" class="card">
-        <h3>Claim</h3>
-        <p>Table with information about claims.</p>
+        <h3>Жалобы</h3>
+        <p>Доступ к таблице claim.</p>
     </a>
     <a href="{{ url_for('admin_rent') }}" class="card">
-        <h3>Rent</h3>
-        <p>Table with information about rents.</p>
+        <h3>Аренда</h3>
+        <p>Доступ к таблице rent.</p>
     </a>
     <a href="{{ url_for('admin_users') }}" class="card">
-        <h3>Users</h3>
-        <p>Table with information about website users.</p>
+        <h3>Пользователи сайта</h3>
+        <p>Доступ к таблице user.</p>
     </a>
 </div>
 {% endblock %}

@@ -129,7 +129,7 @@ def delete_row(row_id):
     return "Успешно удалено", 200
 
 @app.route("/admin/automobile/sql", methods=["GET", "POST"])
-def admin_automobile_sql():
+def admin_sql():
     if request.method == "POST":
         query = request.form["query"]
         conn = get_db_connection()
@@ -139,11 +139,11 @@ def admin_automobile_sql():
             data = cur.fetchall()
             conn.commit()
             conn.close()
-            return render_template("admin_cards/auto_actions/sql.html", data=data, error=None)
+            return render_template("admin_cards/sql.html", data=data, error=None)
         except Exception as e :
             conn.close()
-            return render_template("admin_cards/auto_actions/sql.html", data=None, error=e)
-    return render_template("admin_cards/auto_actions/sql.html", data=None, error=None)
+            return render_template("admin_cards/sql.html", data=None, error=e)
+    return render_template("admin_cards/sql.html", data=None, error=None)
 
 
 @app.route("/admin/type_of_work")

@@ -1,12 +1,12 @@
 <!-- templates/unauthorized.html -->
 {% extends "base.html" %}
 
-{% block title %}Access Denied{% endblock %}
+{% block title %}Доступ запрещен{% endblock %}
 
 {% block content %}
 <div class="access-denied">
-    <h2>Access Denied</h2>
-    <p>You don't have permission to access this page.</p>
+    <h2>Доступ запрещен</h2>
+    <p>У вас нет прав для посещения этой страницы.</p>
     {% if role %}
     <p>Your role: {{ role }}</p>
     {% endif %}
