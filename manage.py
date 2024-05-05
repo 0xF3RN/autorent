@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, session
-from db_connection import get_db_connection
+from db_connection import get_db_connection, get_db_connection_manager
 
 app = Flask(__name__)
 app.secret_key = 'admin'
@@ -104,7 +104,7 @@ def admin_automobile_view():
     columns = [desc[0] for desc in cur.description]
     return render_template("admin_cards/auto_actions/view.html", data=data, columns=columns)
 
-
+#удаление из таблицы авто
 @app.route("/admin/automobile/delete")
 def admin_automobile_delete():
     if session.get('role') != 'admin':
@@ -117,6 +117,7 @@ def admin_automobile_delete():
     columns = [desc[0] for desc in cur.description]
     return render_template("admin_cards/auto_actions/delete.html", data=data, columns=columns)
 
+#endpoint удаления
 @app.route("/admin/automobile/delete/<int:row_id>", methods=["DELETE"])
 def delete_row(row_id):
     if session.get('role') != 'admin':
@@ -128,7 +129,8 @@ def delete_row(row_id):
     conn.close()
     return "Успешно удалено", 200
 
-@app.route("/admin/automobile/sql", methods=["GET", "POST"])
+# sql тулза для админа
+@app.route("/admin/sql", methods=["GET", "POST"])
 def admin_sql():
     if request.method == "POST":
         query = request.form["query"]
@@ -145,7 +147,7 @@ def admin_sql():
             return render_template("admin_cards/sql.html", data=None, error=e)
     return render_template("admin_cards/sql.html", data=None, error=None)
 
-
+# здесь будет много шаблонов для галочки
 @app.route("/admin/type_of_work")
 def admin_type_of_work():
     if session.get('role') != 'admin':
@@ -201,10 +203,29 @@ def admin_users():
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/users.html")
 
-#TODO придумать будет делать менеджер
+#страница менеджеа
 @app.route("/manager")
 def manager():
     return render_template("manager.html")
+
+# sql тулза для менеджера
+@app.route("/manager/sql", methods=["GET", "POST"])
+def manager_sql():
+    if request.method == "POST":
+        query = request.form["query"]
+        conn = get_db_connection_manager()
+        cur = conn.cursor()
+        try:
+            cur.execute(query)
+            data = cur.fetchall()
+            conn.commit()
+            conn.close()
+            return render_template("manager_cards/sql.html", data=data, error=None)
+        except Exception as e :
+            conn.close()
+            return render_template("manager_cards/sql.html", data=None, error=e)
+    return render_template("manager_cards/sql.html", data=None, error=None)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

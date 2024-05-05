@@ -311,18 +311,18 @@ form {
 
 textarea {
     color: #555;
-    resize: none;
     width: 97%;
-    height: 23px;
+    min-height: 50px; /* Set a minimum height for the textarea */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-family: "Courier New", monospace;
     font-size: 20px;
-    font-weight: bold; 
+    font-weight: bold;
+    resize: none; /* Disable manual resizing */
+    overflow: hidden; /* Hide the scrollbar */
 }
-
 input[type="submit"] {
     display: block;
     width: 100%;

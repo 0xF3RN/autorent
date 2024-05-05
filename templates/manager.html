@@ -4,5 +4,11 @@
 {% block title %}Manager{% endblock %}
 
 {% block content %}
-<h2>Manager!</h2>
+<h2>Панель менеджера</h2>
+<div class="card-container">
+    <a href="{{ url_for('manager_sql') }}" class="card">
+        <h3>SQL query</h3>
+        <p>Выполнение sql запросов в БД с правами менеджера.</p>
+    </a>
+</div>
 {% endblock %}
