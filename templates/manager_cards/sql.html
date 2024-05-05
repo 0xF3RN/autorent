@@ -1,0 +1,32 @@
+<!-- templates/admin_sql.html -->
+{% extends "base.html" %}
+
+{% block title %}SQL запрос{% endblock %}
+
+{% block content %}
+
+<h2>Выполнение SQL запроса</h2>
+  <body>
+    <form action="{{ url_for('manager_sql') }}" method="post">
+      <textarea name="query" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
+      <input type="submit" value="Execute Query">
+    </form>
+
+    {% if data %}
+      <h2>Query Result</h2>
+      <table>
+        {% for row in data %}
+          <tr>
+            {% for value in row %}
+              <td>{{ value }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+    {% elif error %}
+      <h2>Error</h2>
+      <p>{{ error }}</p>
+    {% endif %}
+  </body>
+</html>
+{% endblock %}
