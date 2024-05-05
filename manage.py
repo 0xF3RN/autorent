@@ -1,6 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory
 from db_connection import get_db_connection, get_db_connection_manager
-
+from report_gen import create_rent_doc, create_service_doc, create_claim_doc
 app = Flask(__name__)
 app.secret_key = 'admin'
 
@@ -206,11 +206,15 @@ def admin_users():
 #страница менеджеа
 @app.route("/manager")
 def manager():
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
     return render_template("manager.html")
 
 # sql тулза для менеджера
 @app.route("/manager/sql", methods=["GET", "POST"])
 def manager_sql():
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
     if request.method == "POST":
         query = request.form["query"]
         conn = get_db_connection_manager()
@@ -225,6 +229,126 @@ def manager_sql():
             conn.close()
             return render_template("manager_cards/sql.html", data=None, error=e)
     return render_template("manager_cards/sql.html", data=None, error=None)
+
+# формирование отчетов для клиентов (чеки)
+@app.route("/manager/report/invoice")
+def manager_report_invoice():
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+    SET lc_monetary TO "ru_RU.UTF-8";
+    SELECT id_rent, manufacturer, CONCAT(client_surname , ' ',client_name  , ' ', client_fathersname) AS fullname,
+    start_of_rent, end_of_rent, rent_cost FROM client join rent on id_client = client_id join invoice on
+    invoice_id = id_invoice join automobile on id_automobile = automobile_id """)
+    data = cur.fetchall()
+    conn.close()
+    columns = [desc[0] for desc in cur.description]
+    return render_template("manager_cards/report/invoice.html", data=data, columns=columns)
+
+
+@app.route('/manage/report/invoice/generate_report/<int:row_id>')
+def generate_report_invoice(row_id):
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+    SET lc_monetary TO "ru_RU.UTF-8";
+    SELECT id_rent, manufacturer, CONCAT(client_surname , ' ',client_name  , ' ', client_fathersname) AS fullname,
+    start_of_rent, end_of_rent, rent_cost FROM client join rent on id_client = client_id join invoice on
+    invoice_id = id_invoice join automobile on id_automobile = automobile_id WHERE id_rent = %s""", (row_id,))
+    data = cur.fetchone()
+    create_rent_doc([data])
+    cur.close()
+    conn.close()
+    directory = 'reports'
+    filename = 'invoice.docx'
+    return send_from_directory(directory, filename, as_attachment=True)
+
+
+# формирование отчетов для ТО
+@app.route("/manager/report/TO")
+def manager_report_TO():
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+    SET lc_monetary TO "ru_RU.UTF-8";
+    SELECT  id_automobile, manufacturer, organization_name, legal_address, type_of_work, day_of_work
+    FROM automobile
+    JOIN service ON id_automobile = automobile_id
+    JOIN type_of_work ON type_of_work_id = id_type_of_work
+    join partner on parter_id = id_partner
+    WHERE now()::date - day_of_work::date > 365""")
+    data = cur.fetchall()
+    conn.close()
+    columns = [desc[0] for desc in cur.description]
+    return render_template("manager_cards/report/TO.html", data=data, columns=columns)
+
+
+@app.route('/manage/report/TO/generate_report/<int:row_id>')
+def generate_report_TO(row_id):
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+    SET lc_monetary TO "ru_RU.UTF-8";
+    SELECT  id_automobile, manufacturer, organization_name, legal_address, type_of_work, day_of_work
+    FROM automobile
+    JOIN service ON id_automobile = automobile_id
+    JOIN type_of_work ON type_of_work_id = id_type_of_work
+    join partner on parter_id = id_partner
+    WHERE now()::date - day_of_work::date > 365 and id_automobile = %s""", (row_id,))
+    data = cur.fetchone()
+    create_service_doc([data])
+    cur.close()
+    conn.close()
+    directory = 'reports'
+    filename = 'TO.docx'
+    return send_from_directory(directory, filename, as_attachment=True)
+
+
+# формирование отчетов для жалоб
+@app.route("/manager/report/claim")
+def manager_report_claim():
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+    SET lc_monetary TO "ru_RU.UTF-8";
+    SELECT id_claim, manufacturer, CONCAT(client_surname , ' ',client_name  , ' ', client_fathersname)
+    AS fullname, date_of_creation, description  FROM client join rent on id_client = client_id join
+    automobile on id_automobile = automobile_id join claim on claim_id = id_claim;""")
+    data = cur.fetchall()
+    conn.close()
+    columns = [desc[0] for desc in cur.description]
+    return render_template("manager_cards/report/claim.html", data=data, columns=columns)
+
+
+@app.route('/manage/report/claim/generate_report/<int:row_id>')
+def generate_report_claim(row_id):
+    if session.get('role') not in ('admin','manager'):
+        return render_template("unauthorized.html", role=session.get('role'))
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+    SET lc_monetary TO "ru_RU.UTF-8";
+    SELECT id_claim, manufacturer, CONCAT(client_surname , ' ',client_name  , ' ', client_fathersname)
+    AS fullname, date_of_creation, description  FROM client join rent on id_client = client_id join
+    automobile on id_automobile = automobile_id join claim on claim_id = id_claim WHERE id_claim = %s""", (row_id,))
+    data = cur.fetchone()
+    create_claim_doc([data])
+    cur.close()
+    conn.close()
+    directory = 'reports'
+    filename = 'claim.docx'
+    return send_from_directory(directory, filename, as_attachment=True)
+
 
 
 if __name__ == "__main__":

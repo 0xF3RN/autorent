@@ -68,7 +68,8 @@ target/
 
 __pypackages__/
 
-
+.vscode
+/reports
 # Environments
 .env
 .venv

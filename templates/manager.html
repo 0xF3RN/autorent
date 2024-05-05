@@ -10,5 +10,17 @@
         <h3>SQL query</h3>
         <p>Выполнение sql запросов в БД с правами менеджера.</p>
     </a>
+    <a href="{{ url_for('manager_report_invoice') }}" class="card">
+        <h3>Выходной документ</h3>
+        <p>Формирование отчетов для чеков.</p>
+    </a>
+    <a href="{{ url_for('manager_report_TO') }}" class="card">
+        <h3>Выходной документ</h3>
+        <p>Формирование отчетов для ТО.</p>
+    </a>
+    <a href="{{ url_for('manager_report_claim') }}" class="card">
+        <h3>Выходной документ</h3>
+        <p>Формирование отчетов для жалоб.</p>
+    </a>
 </div>
 {% endblock %}
