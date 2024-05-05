@@ -1,6 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory
 from db_connection import get_db_connection, get_db_connection_manager
 from report_gen import create_rent_doc, create_service_doc, create_claim_doc
+
+
 app = Flask(__name__)
 app.secret_key = 'admin'
 
