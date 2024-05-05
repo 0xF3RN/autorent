@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Выходной документ: claim{% endblock %}
+
+{% block content %}
+
+<h2>Формирование отчетов для Жалоб.</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            {% for column in columns %}
+                <th>{{ column }}</th>
+            {% endfor %}
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for row in data %}
+            <tr data-row-id="{{ row[0] }}">
+                
+                {% for value in row %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+                <td>
+                    <a href="#" class="download-icon" onclick="generateReport(this)">Сформировать отчет</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    function generateReport(element) {
+        if (confirm("Вы уверены, что хотите сформировать отчет?")) {
+            let rowId = element.parentNode.parentNode.dataset.rowId;
+            window.location.href = `/manage/report/claim/generate_report/${rowId}`;
+        }
+    }
+</script>
+{% endblock %}
