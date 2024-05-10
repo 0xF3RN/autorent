@@ -27,25 +27,25 @@ def home():
 # логин
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username = %s AND passwd = %s", (username, password))
-        user = cur.fetchone()
-        conn.close()
-        if user:
-            session["username"] = user[1]  # хранение юзернейма в сессии
-            session["role"] = user[3]  # хранение роли в сессии
-            if user[3] == "admin":
-                return redirect(url_for("admin"))
-            elif user[3] == "manager":
-                return redirect(url_for("manager"))
-        else:
-            error = "Неверный логин или пароль."
-            return render_template("login.html", error=error)
-    return render_template("login.html")
+    if request.method != "POST":
+        return render_template("login.html")
+    username = request.form["username"]
+    password = request.form["password"]
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE username = %s AND passwd = %s", (username, password))
+    user = cur.fetchone()
+    conn.close()
+    if user:
+        session["username"] = user[1]  # хранение юзернейма в сессии
+        session["role"] = user[3]  # хранение роли в сессии
+        if user[3] == "admin":
+            return redirect(url_for("admin"))
+        elif user[3] == "manager":
+            return redirect(url_for("manager"))
+    else:
+        error = "Неверный логин или пароль."
+        return render_template("login.html", error=error)
 
 # логаут
 @app.route("/logout")
@@ -72,26 +72,26 @@ def admin_automobile():
 def admin_automobile_insert():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    if request.method == "POST":
-        id_automobile = request.form["id"]
-        manufacturer = request.form["manufacturer"]
-        registration_number = request.form["registration_number"]
-        year_of_car_manufacturer = request.form["year_of_car_manufacture"]
-        mileage = request.form["mileage"]
-        air_conditioner = request.form["air_conditioner"]
-        engine_capacity = request.form["engine_capacity"]
-        luggage_capacity = request.form["luggage_capacity"]
-        maintenance_date = request.form["maintenance_date"]
-        cost_per_day = request.form["cost_per_day"]
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("INSERT INTO automobile (id_automobile, manufacturer, registration_number, year_of_car_manufacture, mileage, air_conditioner, engine_capacity, luggage_capacity, maintenance_date, cost_per_day) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (
-            id_automobile, manufacturer, registration_number, year_of_car_manufacturer, mileage, air_conditioner, engine_capacity, luggage_capacity, maintenance_date, cost_per_day
-        ))
-        conn.commit()
-        conn.close()
-        return redirect(url_for("admin_automobile_view"))  
-    return render_template("admin_cards/auto_actions/insert.html")
+    if request.method != "POST":
+        return render_template("admin_cards/auto_actions/insert.html")
+    id_automobile = request.form["id"]
+    manufacturer = request.form["manufacturer"]
+    registration_number = request.form["registration_number"]
+    year_of_car_manufacturer = request.form["year_of_car_manufacture"]
+    mileage = request.form["mileage"]
+    air_conditioner = request.form["air_conditioner"]
+    engine_capacity = request.form["engine_capacity"]
+    luggage_capacity = request.form["luggage_capacity"]
+    maintenance_date = request.form["maintenance_date"]
+    cost_per_day = request.form["cost_per_day"]
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO automobile (id_automobile, manufacturer, registration_number, year_of_car_manufacture, mileage, air_conditioner, engine_capacity, luggage_capacity, maintenance_date, cost_per_day) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (
+        id_automobile, manufacturer, registration_number, year_of_car_manufacturer, mileage, air_conditioner, engine_capacity, luggage_capacity, maintenance_date, cost_per_day
+    ))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("admin_automobile_view"))  
 
 #просмотр записей automobile
 @app.route("/admin/automobile/view")
@@ -134,20 +134,20 @@ def delete_row(row_id):
 # sql тулза для админа
 @app.route("/admin/sql", methods=["GET", "POST"])
 def admin_sql():
-    if request.method == "POST":
-        query = request.form["query"]
-        conn = get_db_connection()
-        cur = conn.cursor()
-        try:
-            cur.execute(query)
-            data = cur.fetchall()
-            conn.commit()
-            conn.close()
-            return render_template("admin_cards/sql.html", data=data, error=None)
-        except Exception as e :
-            conn.close()
-            return render_template("admin_cards/sql.html", data=None, error=e)
-    return render_template("admin_cards/sql.html", data=None, error=None)
+    if request.method != "POST":
+        return render_template("admin_cards/sql.html", data=None, error=None)
+    query = request.form["query"]
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute(query)
+        data = cur.fetchall()
+        conn.commit()
+        conn.close()
+        return render_template("admin_cards/sql.html", data=data, error=None)
+    except Exception as e:
+        conn.close()
+        return render_template("admin_cards/sql.html", data=None, error=e)
 
 # здесь будет много шаблонов для галочки
 @app.route("/admin/type_of_work")
@@ -217,20 +217,20 @@ def manager():
 def manager_sql():
     if session.get('role') not in ('admin','manager'):
         return render_template("unauthorized.html", role=session.get('role'))
-    if request.method == "POST":
-        query = request.form["query"]
-        conn = get_db_connection_manager()
-        cur = conn.cursor()
-        try:
-            cur.execute(query)
-            data = cur.fetchall()
-            conn.commit()
-            conn.close()
-            return render_template("manager_cards/sql.html", data=data, error=None)
-        except Exception as e :
-            conn.close()
-            return render_template("manager_cards/sql.html", data=None, error=e)
-    return render_template("manager_cards/sql.html", data=None, error=None)
+    if request.method != "POST":
+        return render_template("manager_cards/sql.html", data=None, error=None)
+    query = request.form["query"]
+    conn = get_db_connection_manager()
+    cur = conn.cursor()
+    try:
+        cur.execute(query)
+        data = cur.fetchall()
+        conn.commit()
+        conn.close()
+        return render_template("manager_cards/sql.html", data=data, error=None)
+    except Exception as e :
+        conn.close()
+        return render_template("manager_cards/sql.html", data=None, error=e)
 
 # формирование отчетов для клиентов (чеки)
 @app.route("/manager/report/invoice")
