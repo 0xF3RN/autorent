@@ -4,29 +4,38 @@
 {% block title %}SQL запрос{% endblock %}
 
 {% block content %}
+  <h2>Выполнение SQL запроса</h2>
+  <a href="https://www.postgresql.org/docs/" target="_blank"> Документация SQL</a>
 
-<h2>Выполнение SQL запроса</h2>
-  <body>
-    <form action="{{ url_for('manager_sql') }}" method="post">
-      <textarea name="query" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
-      <input type="submit" value="Execute Query">
-    </form>
+  <form action="{{ url_for('manager_sql') }}" method="post">
+    <textarea id="query" name="query" rows="5" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
+    <button type="button" class="cute-button" onclick="insertQuery('SELECT count(id_rent) as deals, employee_name, employee_surname, employee_fathersname FROM rent INNER JOIN employee on id_employee = employee_id INNER JOIN invoice on invoice_id = id_invoice WHERE DATE_PART(\'Year\', invoice.date_of_creation) = 2023 GROUP BY employee_name, employee_surname, employee_fathersname ORDER BY deals DESC')">Показатели сотрудников за 2023 год, количество сделок\имя сотрудника</button>
+    <button type="button" class="cute-button" onclick="insertQuery('SELECT count(id_rent) as deals, manufacturer FROM rent INNER JOIN automobile on id_automobile = automobile_id INNER JOIN invoice on invoice_id = id_invoice WHERE DATE_PART(\'Year\', invoice.date_of_creation) = 2023 GROUP BY manufacturer ORDER BY deals DESC')">Самые популярные автомобили в 2023 году</button>
+    <button type="button" class="cute-button" onclick="insertQuery('SELECT count(id_claim) as amount_of_claims, employee_name, employee_surname, employee_fathersname FROM rent INNER JOIN employee on id_employee = employee_id INNER JOIN claim on claim_id = id_claim WHERE DATE_PART(\'Year\', claim.date_of_creation) = 2023 GROUP BY employee_name, employee_surname, employee_fathersname ORDER BY amount_of_claims DESC')">Сотрудники, которые фиксировали жалобы на клиентов</button>
+    <button type="button" class="cute-button" onclick="insertQuery('SELECT sum(rent.mileage) as sum_miles, manufacturer FROM rent INNER JOIN automobile on id_automobile = automobile_id INNER JOIN invoice on invoice_id = id_invoice WHERE DATE_PART(\'Year\', invoice.date_of_creation) = 2023 AND DATE_PART(\'Quarter\', invoice.date_of_creation) = 3 GROUP BY manufacturer ORDER BY sum_miles DESC')">Расстояние пройденное машинами (индивидуально) за Q3</button>
+    
+    <input type="submit" value="Execute Query">
+  </form>
 
-    {% if data %}
-      <h2>Query Result</h2>
-      <table>
-        {% for row in data %}
-          <tr>
-            {% for value in row %}
-              <td>{{ value }}</td>
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
-    {% elif error %}
-      <h2>Error</h2>
-      <p>{{ error }}</p>
-    {% endif %}
-  </body>
-</html>
+  {% if data %}
+    <h2>Query Result</h2>
+    <table>
+      {% for row in data %}
+        <tr>
+          {% for value in row %}
+            <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  {% elif error %}
+    <h2>Error</h2>
+    <p>{{ error }}</p>
+  {% endif %}
+
+  <script>
+    function insertQuery(savedQuery) {
+      document.getElementById('query').value = savedQuery;
+    }
+  </script>
 {% endblock %}
