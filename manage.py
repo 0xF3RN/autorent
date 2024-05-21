@@ -6,7 +6,7 @@ from report_gen import create_rent_doc, create_service_doc, create_claim_doc
 app = Flask(__name__)
 app.secret_key = 'admin'
 
-# рут -> логин
+
 @app.route("/")
 def root():
     if session.get('role') == 'admin':
@@ -15,7 +15,7 @@ def root():
         return render_template("manager.html")
     return redirect(url_for("login"))
 
-# хоум, для быстрого редиректа на хоумпйдж в зависимости от роли
+
 @app.route("/home")
 def home():
     if session.get('role') == 'admin':
@@ -24,7 +24,7 @@ def home():
         return render_template("manager.html")
     return redirect(url_for("login"))
 
-# логин
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method != "POST":
@@ -37,8 +37,8 @@ def login():
     user = cur.fetchone()
     conn.close()
     if user:
-        session["username"] = user[1]  # хранение юзернейма в сессии
-        session["role"] = user[3]  # хранение роли в сессии
+        session["username"] = user[1]  
+        session["role"] = user[3]  
         if user[3] == "admin":
             return redirect(url_for("admin"))
         elif user[3] == "manager":
@@ -47,27 +47,27 @@ def login():
         error = "Неверный логин или пароль."
         return render_template("login.html", error=error)
 
-# логаут
+
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login"))
 
-# страница админа
+
 @app.route("/admin")
 def admin():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin.html")
 
-#TODO наладить взаимодействие страниц с БД
+
 @app.route("/admin/automobile")
 def admin_automobile():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/automobile.html")
 
-#инсерт в таблицу automobile
+
 @app.route("/admin/automobile/insert", methods=["GET","POST"])
 def admin_automobile_insert():
     if session.get('role') != 'admin':
@@ -93,7 +93,7 @@ def admin_automobile_insert():
     conn.close()
     return redirect(url_for("admin_automobile_view"))  
 
-#просмотр записей automobile
+
 @app.route("/admin/automobile/view")
 def admin_automobile_view():
     if session.get('role') != 'admin':
@@ -106,7 +106,7 @@ def admin_automobile_view():
     columns = [desc[0] for desc in cur.description]
     return render_template("admin_cards/auto_actions/view.html", data=data, columns=columns)
 
-#удаление из таблицы авто
+
 @app.route("/admin/automobile/delete")
 def admin_automobile_delete():
     if session.get('role') != 'admin':
@@ -119,7 +119,7 @@ def admin_automobile_delete():
     columns = [desc[0] for desc in cur.description]
     return render_template("admin_cards/auto_actions/delete.html", data=data, columns=columns)
 
-#endpoint удаления
+
 @app.route("/admin/automobile/delete/<int:row_id>", methods=["DELETE"])
 def delete_row(row_id):
     if session.get('role') != 'admin':
@@ -131,7 +131,7 @@ def delete_row(row_id):
     conn.close()
     return "Успешно удалено", 200
 
-# sql тулза для админа
+
 @app.route("/admin/sql", methods=["GET", "POST"])
 def admin_sql():
     if request.method != "POST":
@@ -149,19 +149,20 @@ def admin_sql():
         conn.close()
         return render_template("admin_cards/sql.html", data=None, error=e)
 
-# здесь будет много шаблонов для галочки
+
 @app.route("/admin/type_of_work")
 def admin_type_of_work():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
 
-#TODO partner
+
 @app.route("/admin/partner")
 def admin_partner():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
+
 
 @app.route("/admin/service")
 def admin_service():
@@ -169,11 +170,13 @@ def admin_service():
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
 
+
 @app.route("/admin/client")
 def admin_client():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
+
 
 @app.route("/admin/employee")
 def admin_employee():
@@ -181,11 +184,13 @@ def admin_employee():
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
 
+
 @app.route("/admin/invoice")
 def admin_invoice():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
+
 
 @app.route("/admin/claim")
 def admin_claim():
@@ -193,11 +198,13 @@ def admin_claim():
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
 
+
 @app.route("/admin/rent")
 def admin_rent():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
+
 
 @app.route("/admin/users")
 def admin_users():
@@ -205,14 +212,14 @@ def admin_users():
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("admin_cards/type_of_work.html")
 
-#страница менеджеа
+
 @app.route("/manager")
 def manager():
     if session.get('role') not in ('admin','manager'):
         return render_template("unauthorized.html", role=session.get('role'))
     return render_template("manager.html")
 
-# sql тулза для менеджера
+
 @app.route("/manager/sql", methods=["GET", "POST"])
 def manager_sql():
     if session.get('role') not in ('admin','manager'):
@@ -232,7 +239,7 @@ def manager_sql():
         conn.close()
         return render_template("manager_cards/sql.html", data=None, error=e)
 
-# формирование отчетов для клиентов (чеки)
+
 @app.route("/manager/report/invoice")
 def manager_report_invoice():
     if session.get('role') not in ('admin','manager'):
@@ -270,7 +277,6 @@ def generate_report_invoice(row_id):
     return send_from_directory(directory, filename, as_attachment=True)
 
 
-# формирование отчетов для ТО
 @app.route("/manager/report/TO")
 def manager_report_TO():
     if session.get('role') not in ('admin','manager'):
@@ -314,7 +320,6 @@ def generate_report_TO(row_id):
     return send_from_directory(directory, filename, as_attachment=True)
 
 
-# формирование отчетов для жалоб
 @app.route("/manager/report/claim")
 def manager_report_claim():
     if session.get('role') not in ('admin','manager'):
