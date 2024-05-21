@@ -5,7 +5,7 @@
 
 {% block content %}
   <h2>Выполнение SQL запроса</h2>
-  <a href="https://www.postgresql.org/docs/" target="_blank"> Документация SQL</a>
+  <a href="https://www.postgresql.org/docs/"> Документация SQL</a>
 
   <form action="{{ url_for('manager_sql') }}" method="post">
     <textarea id="query" name="query" rows="5" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>

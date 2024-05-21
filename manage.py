@@ -161,49 +161,49 @@ def admin_type_of_work():
 def admin_partner():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/partner.html")
+    return render_template("admin_cards/type_of_work.html")
 
 @app.route("/admin/service")
 def admin_service():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/service.html")
+    return render_template("admin_cards/type_of_work.html")
 
 @app.route("/admin/client")
 def admin_client():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/client.html")
+    return render_template("admin_cards/type_of_work.html")
 
 @app.route("/admin/employee")
 def admin_employee():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/employee.html")
+    return render_template("admin_cards/type_of_work.html")
 
 @app.route("/admin/invoice")
 def admin_invoice():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/invoice.html")
+    return render_template("admin_cards/type_of_work.html")
 
 @app.route("/admin/claim")
 def admin_claim():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/claim.html")
+    return render_template("admin_cards/type_of_work.html")
 
 @app.route("/admin/rent")
 def admin_rent():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/rent.html")
+    return render_template("admin_cards/type_of_work.html")
 
 @app.route("/admin/users")
 def admin_users():
     if session.get('role') != 'admin':
         return render_template("unauthorized.html", role=session.get('role'))
-    return render_template("admin_cards/users.html")
+    return render_template("admin_cards/type_of_work.html")
 
 #страница менеджеа
 @app.route("/manager")

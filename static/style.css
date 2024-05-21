@@ -1,22 +1,27 @@
 
+.cute-button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
 .cute-button {
-    text-align: center;
-    background-color: #2c3e50; 
+    width: 170px;
+    background-color: #2c3e50;
     color: #fff;
-    padding: 10px 20px;
+    padding: 10px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s;
-  }
+    margin: 12px 12px;
+}
 
-  .cute-button:hover {
-    background-color: #ff9999;
-  }
+.cute-button:hover {
+    background-color: #99c3ff;
+}
 
 header {
     background-color: #ff9900;
@@ -242,7 +247,6 @@ tr:hover {
     background-color: #f9f9f9;
 }
 
-/* styles.css */
 .form-container {
     width: 50%;
     margin: 0 auto;
@@ -298,7 +302,6 @@ tr:hover {
     color: red;
 }
 
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
@@ -323,16 +326,16 @@ form {
 textarea {
     color: #555;
     width: 97%;
-    min-height: 50px; /* Set a minimum height for the textarea */
+    min-height: 100px; 
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-family: "Courier New", monospace;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    resize: none; /* Disable manual resizing */
-    overflow: hidden; /* Hide the scrollbar */
+    resize: none; 
+    overflow: hidden; 
 }
 input[type="submit"] {
     display: block;
