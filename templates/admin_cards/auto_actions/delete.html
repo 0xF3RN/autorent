@@ -1,12 +1,7 @@
-<!-- templates/dynamic_table.html -->
 {% extends "base.html" %}
-
 {% block title %}Удаление записей{% endblock %}
-
 {% block content %}
-
 <h2>Удаление записей</h2>
-
 <table class="table">
     <thead>
         <tr>
@@ -31,7 +26,6 @@
         {% endfor %}
     </tbody>
 </table>
-
 <script>
     function confirmDelete(element) {
         if (confirm("Вы уверены, что хотите удалить эту запись?")) {
