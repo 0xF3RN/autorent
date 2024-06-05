@@ -6,7 +6,15 @@ from report_gen import create_rent_doc, create_service_doc, create_claim_doc
 app = Flask(__name__)
 app.secret_key = 'admin'
 
-
+'''
+никода, никогда не используйте этот проект для реферанса
+ОН ПРОСТО УЖАСЕН
+ПРОШУ НЕ ДЕЛАЙТЕ ЭТИХ ОШИБОК
+Я ЕГО ДЕЛАЛ НА ОТВАЛИ
+ХААХХААХАХАХ
+Я НЕ ШУЧУ
+ВОТ КАК ТО ТАК И ЖИВЕМ
+'''
 @app.route("/")
 def root():
     if session.get('role') == 'admin':
