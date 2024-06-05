@@ -157,7 +157,13 @@ def admin_sql():
         conn.close()
         return render_template("admin_cards/sql.html", data=None, error=e)
 
-
+'''
+тут супер много роутов, они не работают, но я их добавил, типа они есть аахахах
+это ужас
+какой ужасный проект
+если кто то это читает - простите меня
+ПАЖОСТА
+'''
 @app.route("/admin/type_of_work")
 def admin_type_of_work():
     if session.get('role') != 'admin':
